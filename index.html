@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Our Memories 💗</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;500&display=swap">
+<style>
+:root{--pink:#ff4d9d;--pink2:#ff8fc4;--bg:#09090b;--panel:rgba(22,16,24,.72);--line:rgba(255,77,157,.35);--txt:#fff0f6;color-scheme:dark}
+*{box-sizing:border-box}
+html{height:100%}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--txt);font-family:'Poppins',system-ui,sans-serif;-webkit-tap-highlight-color:transparent;padding-top:env(safe-area-inset-top,0)}
+#bg{position:fixed;inset:0;z-index:-2;background:radial-gradient(circle at 20% 10%,#4a0f2c 0,#14060d 45%,#09090b 100%) center/cover no-repeat}
+#bgov{position:fixed;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(9,9,11,.55),rgba(9,9,11,.8))}
+button{font:inherit;cursor:pointer;border:0;color:inherit}
+.btn{background:linear-gradient(135deg,var(--pink),#c2185b);padding:10px 18px;border-radius:99px;font-weight:500;box-shadow:0 4px 18px rgba(255,77,157,.35)}
+.ghost{background:rgba(255,255,255,.08);border:1px solid var(--line);padding:9px 14px;border-radius:99px;font-size:13px}
+#lock{position:fixed;inset:0;z-index:50;background:radial-gradient(circle at 50% 0,#3a0a22,#09090b 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:20px;overflow:hidden}
+#lock h2{font-family:'Dancing Script',cursive;font-size:38px;margin:0;color:var(--pink2)}
+#lock p{margin:0;font-size:13px;opacity:.7}
+.dots{display:flex;gap:14px;height:16px}
+.dots i{width:14px;height:14px;border-radius:50%;border:2px solid var(--pink);transition:.15s}
+.dots i.on{background:var(--pink);box-shadow:0 0 12px var(--pink)}
+.dots.bad{animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
+.pad{display:grid;grid-template-columns:repeat(3,72px);gap:12px}
+.pad button{height:72px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid var(--line);font-size:24px}
+.pad button:active{background:var(--pink)}
+.heart{position:absolute;bottom:-30px;color:var(--pink);opacity:.5;animation:rise linear infinite;pointer-events:none}
+@keyframes rise{to{transform:translateY(-110vh) rotate(25deg);opacity:0}}
+#app{display:none;max-width:1100px;margin:0 auto;padding:28px 16px 130px}
+header{text-align:center;margin-bottom:22px}
+#title{font-family:'Dancing Script',cursive;font-size:clamp(38px,9vw,64px);margin:0;color:var(--pink2);text-shadow:0 0 24px rgba(255,77,157,.55);outline:0}
+#sub{font-size:13px;opacity:.7;margin-top:4px}
+#warn{display:none;text-align:center;background:var(--panel);border:1px solid var(--pink);border-radius:14px;padding:12px;margin-bottom:14px;font-size:13px}
+.tabs{display:flex;gap:8px;justify-content:center;margin-bottom:18px}
+.tab{background:rgba(255,255,255,.07);border:1px solid var(--line);padding:8px 22px;border-radius:99px}.tab.on{background:var(--pink)}
+.bar{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:0 0 22px}
+#grid{columns:2 150px;column-gap:12px}
+@media(min-width:700px){#grid{columns:4}}
+.ph{break-inside:avoid;margin-bottom:12px;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#1a1018;cursor:pointer;transition:transform .2s}
+.ph:hover{transform:translateY(-3px)}
+.ph img{display:block;width:100%;height:auto}
+#empty{text-align:center;opacity:.7;padding:50px 10px;display:none}
+#trash{display:none;margin-top:26px;padding:14px;border-radius:14px;background:var(--panel);border:1px solid var(--line)}
+#trash .it{display:inline-block;margin:6px;text-align:center;vertical-align:top}
+#trash img{width:84px;height:84px;object-fit:cover;border-radius:10px;display:block;margin-bottom:6px}
+.tr{display:flex;align-items:center;gap:10px;padding:12px;margin-bottom:8px;border-radius:12px;background:var(--panel);border:1px solid var(--line);cursor:pointer}
+.tr.cur{border-color:var(--pink);box-shadow:0 0 14px rgba(255,77,157,.4)}
+.tr span{flex:1;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tr b{font-weight:400;font-size:12px;opacity:.8}
+#lb{position:fixed;inset:0;z-index:40;background:rgba(5,3,6,.94);display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:16px}
+#lb img{max-width:100%;max-height:70vh;border-radius:14px;box-shadow:0 0 40px rgba(255,77,157,.3)}
+.row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.nav{position:absolute;top:50%;background:rgba(255,255,255,.1);width:42px;height:42px;border-radius:50%;font-size:20px}
+#player{position:fixed;left:0;right:0;bottom:0;z-index:30;display:none;align-items:center;gap:10px;justify-content:center;flex-wrap:wrap;padding:10px 14px calc(10px + env(safe-area-inset-bottom,0));background:var(--panel);backdrop-filter:blur(14px);border-top:1px solid var(--line)}
+#player button{background:rgba(255,255,255,.08);width:38px;height:38px;border-radius:50%}
+#player #pp{background:var(--pink);width:44px;height:44px}
+#tname{font-size:13px;min-width:120px;max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#vol{width:80px;accent-color:var(--pink)}
+#toast{position:fixed;left:50%;top:calc(16px + env(safe-area-inset-top,0));transform:translateX(-50%);z-index:60;background:#2a0f1c;border:1px solid var(--pink);padding:10px 16px;border-radius:12px;font-size:13px;display:none;max-width:90%}
+</style>
+</head>
+<body>
+<div id="bg"></div><div id="bgov"></div><div id="toast"></div>
+
+<div id="lock">
+  <h2>Our Memories</h2>
+  <p>Masukkan PIN untuk masuk 💗</p>
+  <div class="dots" id="dots"><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="pad" id="pad"></div>
+</div>
+
+<div id="app">
+  <header>
+    <h1 id="title" contenteditable="true" spellcheck="false">Kita Berdua</h1>
+    <div id="sub"><span id="count">0</span> kenangan tersimpan · ketuk judul untuk mengubahnya</div>
+  </header>
+  <div id="warn"></div>
+  <div class="tabs"><button class="tab on" id="tabP">📷 Foto</button><button class="tab" id="tabM">🎵 Musik</button></div>
+
+  <div id="secP">
+    <div class="bar">
+      <button class="btn" id="addPhoto">＋ Tambah Foto</button>
+      <button class="ghost" id="bgPick">🖼 Latar dari Foto</button>
+      <button class="ghost" id="bgSlide">🔀 Slideshow: mati</button>
+      <button class="ghost" id="resetBg">Reset Latar</button>
+      <button class="ghost" id="trashBtn">♻ Sampah (<span id="tc">0</span>)</button>
+    </div>
+    <div id="grid"></div>
+    <div id="empty">Belum ada foto 📷<br>Tambahkan foto pertama kalian.</div>
+    <div id="trash"></div>
+  </div>
+
+  <div id="secM" style="display:none">
+    <div class="bar"><button class="btn" id="addM">＋ Tambah Musik</button></div>
+    <div id="tlist"></div>
+  </div>
+  <input type="file" id="fp" accept="image/*" multiple hidden>
+  <input type="file" id="fb" accept="image/*" hidden>
+  <input type="file" id="fm" accept="audio/*,video/mp4" multiple hidden>
+</div>
+
+<div id="lb">
+  <button class="nav" id="lprev" style="left:10px">‹</button>
+  <button class="nav" id="lnext" style="right:10px">›</button>
+  <img id="limg" alt="Foto kenangan">
+  <div class="row">
+    <button class="btn" id="setbg">🖼 Jadikan Latar</button>
+    <button class="ghost" id="del">🗑 Hapus</button>
+    <button class="ghost" id="lclose">✕ Tutup</button>
+  </div>
+</div>
+
+<div id="player">
+  <button id="prev">⏮</button><button id="pp">▶</button><button id="next">⏭</button>
+  <span id="tname">Melodi Bawaan</span>
+  <input type="range" id="vol" min="0" max="1" step="0.05" value="0.6">
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+/* ===== ISI DUA BARIS INI (dari Supabase: Project Settings > API) ===== */
+const SB_URL='https://oszondaabgomtffklvzw.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zem9uZGFhYmdvbXRmZmtsdnp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI5NDgzMjEsImV4cCI6MjEwODUyNDMyMX0.OsDJlfWnLGzZ2-mVX_frO1QHnsPbfJw18bfPac8w_1o';
+/* ====================================================================== */
+const PIN='10926',BUCKET='memories';
+const $=s=>document.querySelector(s);
+const configured=!SB_URL.startsWith('ISI');
+const sb=configured&&window.supabase?supabase.createClient(SB_URL,SB_KEY):null;
+let photos=[],trashP=[],tracks=[],trashT=[],settings={},li=0,ci=0,playing=false,vol=.6,si=0;
+function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>t.style.display='none',3500)}
+function ss(k,v){try{return v===undefined?sessionStorage.getItem(k):sessionStorage.setItem(k,v)}catch(e){return null}}
+const NOCONN='Belum terhubung ke Supabase. Isi SB_URL dan SB_KEY di kode.';
+
+/* ---------- PIN ---------- */
+let entered='';
+['1','2','3','4','5','6','7','8','9','','0','⌫'].forEach(k=>{
+  const b=document.createElement('button');b.textContent=k;if(!k)b.style.visibility='hidden';
+  b.onclick=()=>press(k);$('#pad').appendChild(b);
+});
+function dots(){document.querySelectorAll('#dots i').forEach((d,i)=>d.classList.toggle('on',i<entered.length))}
+function press(k){
+  if(k==='⌫')entered=entered.slice(0,-1);else if(entered.length<5)entered+=k;
+  dots();
+  if(entered.length===5){
+    if(entered===PIN){ss('ok','1');unlock()}
+    else{const d=$('#dots');d.classList.add('bad');setTimeout(()=>{d.classList.remove('bad');entered='';dots()},450)}
+  }
+}
+for(let i=0;i<14;i++){const h=document.createElement('span');h.className='heart';h.textContent='♥';
+  h.style.left=Math.random()*100+'%';h.style.fontSize=(12+Math.random()*22)+'px';
+  h.style.animationDuration=(7+Math.random()*8)+'s';h.style.animationDelay=(-Math.random()*10)+'s';$('#lock').appendChild(h)}
+document.addEventListener('keydown',e=>{if($('#lock').style.display!=='none'){if(/^\d$/.test(e.key))press(e.key);if(e.key==='Backspace')press('⌫')}});
+function unlock(){$('#lock').style.display='none';$('#app').style.display='block';$('#player').style.display='flex';start()}
+
+/* ---------- data ---------- */
+async function loadAll(){
+  if(!sb)return;
+  const [p,t,s]=await Promise.all([
+    sb.from('photos').select('*').order('created_at',{ascending:false}),
+    sb.from('tracks').select('*').order('created_at'),
+    sb.from('settings').select('*').eq('id',1).maybeSingle()]);
+  if(p.error||t.error){toast('Gagal memuat: '+(p.error||t.error).message);return}
+  photos=p.data.filter(x=>!x.deleted);trashP=p.data.filter(x=>x.deleted);
+  const pid=(allTracks()[ci]||{}).id;
+  tracks=t.data.filter(x=>!x.deleted);trashT=t.data.filter(x=>x.deleted);
+  const i=allTracks().findIndex(x=>x.id===pid);ci=i<0?0:i;
+  settings=s.data||{};render();
+}
+let rt;
+function start(){
+  if(!sb){$('#warn').textContent=NOCONN;$('#warn').style.display='block';render();return}
+  loadAll();
+  ['photos','tracks','settings'].forEach(t=>sb.channel('rt-'+t).on('postgres_changes',{event:'*',schema:'public',table:t},()=>{clearTimeout(rt);rt=setTimeout(loadAll,300)}).subscribe());
+  setInterval(loadAll,30000);
+}
+async function up(blob,folder,ext,type){
+  const path=folder+'/'+Date.now()+'-'+Math.random().toString(36).slice(2,7)+'.'+ext;
+  const r=await sb.storage.from(BUCKET).upload(path,blob,{contentType:type});
+  if(r.error)throw r.error;
+  return {path,url:sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl};
+}
+async function shrink(file){
+  try{
+    const bm=await createImageBitmap(file),r=Math.min(1,1800/Math.max(bm.width,bm.height));
+    const c=document.createElement('canvas');c.width=Math.round(bm.width*r);c.height=Math.round(bm.height*r);
+    c.getContext('2d').drawImage(bm,0,0,c.width,c.height);
+    return await new Promise(res=>c.toBlob(b=>res(b||file),'image/jpeg',.86));
+  }catch(e){return file}
+}
+async function savePhoto(file){
+  const f=await up(await shrink(file),'photos','jpg','image/jpeg');
+  const r=await sb.from('photos').insert({url:f.url,path:f.path});if(r.error)throw r.error;
+  return f.url;
+}
+const setSet=o=>sb.from('settings').update(o).eq('id',1).then(r=>{if(r.error)toast('Gagal: '+r.error.message);else loadAll()});
+
+/* ---------- tampilan ---------- */
+function render(){
+  if(document.activeElement!==$('#title'))$('#title').textContent=settings.title||'Kita Berdua';
+  $('#bg').style.backgroundImage=settings.bg?'url("'+settings.bg+'")':'';
+  $('#bgSlide').textContent='🔀 Slideshow: '+(settings.slide?'nyala':'mati');
+  slideShow();
+  const g=$('#grid');g.innerHTML='';
+  photos.forEach((p,i)=>{
+    const d=document.createElement('div');d.className='ph';
+    const im=document.createElement('img');im.src=p.url;im.loading='lazy';im.alt='Foto kenangan';
+    d.appendChild(im);d.onclick=()=>{li=i;$('#lb').style.display='flex';showLb()};g.appendChild(d);
+  });
+  $('#count').textContent=photos.length;$('#empty').style.display=photos.length?'none':'block';
+  if($('#lb').style.display==='flex')showLb();
+  renderTrash();renderTracks();
+}
+function slideShow(){const n=photos.length;if(settings.slide&&n)$('#bg').style.backgroundImage='url("'+photos[si%n].url+'")'}
+setInterval(()=>{si++;slideShow()},7000);
+function renderTrash(){
+  const t=$('#trash');$('#tc').textContent=trashP.length+trashT.length;
+  t.innerHTML='<div style="text-align:center;margin-bottom:8px">Sampah — tidak ada yang terhapus permanen ♻</div>';
+  if(!trashP.length&&!trashT.length){t.innerHTML+='<p style="text-align:center;opacity:.6;font-size:13px">Kosong</p>';return}
+  const mk=(label,tbl,id,img)=>{
+    const d=document.createElement('div');d.className='it';
+    if(img){const im=document.createElement('img');im.src=img;im.alt='';d.appendChild(im)}
+    else{const s=document.createElement('div');s.textContent='♪ '+label;s.style.margin='0 0 6px';d.appendChild(s)}
+    const b=document.createElement('button');b.className='ghost';b.textContent='Pulihkan';
+    b.onclick=()=>sb.from(tbl).update({deleted:false}).eq('id',id).then(loadAll);
+    d.appendChild(b);t.appendChild(d)};
+  trashP.forEach(p=>mk('','photos',p.id,p.url));trashT.forEach(k=>mk(k.name,'tracks',k.id));
+}
+$('#title').addEventListener('blur',()=>{
+  const t=$('#title').textContent.trim()||'Kita Berdua';if(sb&&t!==settings.title)setSet({title:t});
+});
+$('#title').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();e.target.blur()}});
+function tab(x){$('#secP').style.display=x==='P'?'':'none';$('#secM').style.display=x==='M'?'':'none';$('#tabP').classList.toggle('on',x==='P');$('#tabM').classList.toggle('on',x==='M')}
+$('#tabP').onclick=()=>tab('P');$('#tabM').onclick=()=>tab('M');
+$('#trashBtn').onclick=()=>{const t=$('#trash');t.style.display=t.style.display==='block'?'none':'block'};
+
+/* ---------- foto ---------- */
+$('#addPhoto').onclick=()=>$('#fp').click();
+$('#fp').onchange=async e=>{
+  const files=[...e.target.files];e.target.value='';if(!files.length)return;if(!sb)return toast(NOCONN);
+  let ok=0;
+  for(let i=0;i<files.length;i++){
+    toast('Mengunggah '+(i+1)+'/'+files.length+'…');
+    try{await savePhoto(files[i]);ok++}catch(err){toast('Gagal: '+(err.message||'coba lagi'))}
+  }
+  if(ok){toast(ok+' foto tersimpan 💗');loadAll()}
+};
+$('#bgPick').onclick=()=>$('#fb').click();
+$('#fb').onchange=async e=>{
+  const f=e.target.files[0];e.target.value='';if(!f)return;if(!sb)return toast(NOCONN);
+  try{toast('Menyimpan latar…');const u=await savePhoto(f);await setSet({bg:u,slide:false});toast('Latar diganti 💗')}
+  catch(err){toast('Gagal: '+(err.message||'coba lagi'))}
+};
+$('#bgSlide').onclick=()=>{if(sb)setSet({slide:!settings.slide})};
+$('#resetBg').onclick=()=>{if(sb)setSet({bg:null,slide:false})};
+function showLb(){
+  if(!photos.length){$('#lb').style.display='none';return}
+  li=(li+photos.length)%photos.length;$('#limg').src=photos[li].url;
+}
+$('#lclose').onclick=()=>$('#lb').style.display='none';
+$('#lprev').onclick=()=>{li--;showLb()};$('#lnext').onclick=()=>{li++;showLb()};
+$('#setbg').onclick=async()=>{await setSet({bg:photos[li].url,slide:false});$('#lb').style.display='none';toast('Latar diganti 💗')};
+let da=false;
+$('#del').onclick=()=>{
+  if(!da){da=true;$('#del').textContent='Pindah ke Sampah?';setTimeout(()=>{da=false;$('#del').textContent='🗑 Hapus'},3000);return}
+  da=false;$('#del').textContent='🗑 Hapus';
+  sb.from('photos').update({deleted:true}).eq('id',photos[li].id).then(r=>{if(r.error)toast('Gagal');else{toast('Dipindah ke Sampah, bisa dipulihkan ♻');loadAll()}});
+};
+
+/* ---------- musik ---------- */
+const synthTrack={id:'synth',name:'Melodi Bawaan ♡',synth:true};
+const allTracks=()=>[synthTrack,...tracks];
+const au=new Audio();au.onended=()=>nextTrack();
+let ac,master,timer,step=0,nextT=0;
+const prog=[[220,261.63,329.63],[174.61,220,261.63],[261.63,329.63,392],[196,246.94,293.66]],seq=[0,1,2,1,2,1,2,1];
+function note(f,t,d,v){const o=ac.createOscillator(),g=ac.createGain();o.type='triangle';o.frequency.value=f;
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.04);g.gain.exponentialRampToValueAtTime(.0001,t+d);
+  o.connect(g);g.connect(master);o.start(t);o.stop(t+d+.05)}
+function sched(){while(nextT<ac.currentTime+.6){const ch=prog[Math.floor(step/8)%4],i=step%8;
+  note(ch[seq[i]]*2,nextT,1.1,.5);if(i===0)note(ch[0]/2,nextT,3,.7);step++;nextT+=.42}}
+function startSynth(){ac=ac||new (window.AudioContext||window.webkitAudioContext)();
+  if(!master){master=ac.createGain();master.connect(ac.destination)}
+  master.gain.value=vol*.35;ac.resume();nextT=ac.currentTime+.05;clearInterval(timer);timer=setInterval(sched,150)}
+function stopSynth(){clearInterval(timer);if(ac)ac.suspend()}
+function play(){
+  const t=allTracks()[ci]||synthTrack;
+  if(t.synth){au.pause();startSynth()}
+  else{stopSynth();au.src=t.url;au.volume=vol;au.play().catch(()=>toast('Lagu tidak bisa diputar'))}
+  playing=true;ui();
+}
+function pause(){stopSynth();au.pause();playing=false;ui()}
+function nextTrack(d=1){const n=allTracks().length;ci=(ci+d+n)%n;play()}
+function ui(){const t=allTracks()[ci]||synthTrack;$('#tname').textContent=t.name;$('#pp').textContent=playing?'⏸':'▶';renderTracks()}
+function renderTracks(){
+  const l=$('#tlist');l.innerHTML='';
+  allTracks().forEach((t,i)=>{
+    const d=document.createElement('div');d.className='tr'+(i===ci?' cur':'');
+    const s=document.createElement('span');s.textContent=(i===ci&&playing?'▶ ':'♪ ')+t.name;d.appendChild(s);
+    d.onclick=()=>{ci=i;play()};
+    if(!t.synth&&sb){const b=document.createElement('b');b.textContent='🗑';
+      b.onclick=e=>{e.stopPropagation();
+        if(b.dataset.a){if(i===ci){pause();ci=0}sb.from('tracks').update({deleted:true}).eq('id',t.id).then(()=>{toast('Lagu dipindah ke Sampah ♻');loadAll()})}
+        else{b.dataset.a=1;b.textContent='Yakin?';setTimeout(()=>{delete b.dataset.a;b.textContent='🗑'},3000)}};
+      d.appendChild(b)}
+    l.appendChild(d);
+  });
+}
+$('#pp').onclick=()=>playing?pause():play();
+$('#next').onclick=()=>nextTrack(1);$('#prev').onclick=()=>nextTrack(-1);
+$('#vol').oninput=e=>{vol=+e.target.value;au.volume=vol;if(master)master.gain.value=vol*.35};
+$('#addM').onclick=()=>$('#fm').click();
+$('#fm').onchange=async e=>{
+  const files=[...e.target.files];e.target.value='';if(!files.length)return;if(!sb)return toast(NOCONN);
+  for(const f of files){
+    try{
+      toast('Mengunggah '+f.name+'…');
+      const ext=(f.name.split('.').pop()||'mp3').toLowerCase().replace(/[^a-z0-9]/g,'');
+      const u=await up(f,'music',ext,f.type||'audio/mpeg');
+      const r=await sb.from('tracks').insert({name:f.name.replace(/\.[^.]+$/,''),url:u.url,path:u.path});if(r.error)throw r.error;
+      toast('Musik ditambahkan ♪');
+    }catch(err){toast('Gagal: '+(err.message||'coba lagi'))}
+  }
+  loadAll();
+};
+
+if(ss('ok')==='1')unlock();
+render();
+</script>
+</body>
+</html>
